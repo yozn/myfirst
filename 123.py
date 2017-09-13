@@ -28,7 +28,8 @@ def callback():
     print(signature)
     json_line = request.get_json()
     print(json_line['events'][0])
-    print(type(json_line['events'][0]))
+    print(json_line['events'][0]['replyToken'])
+    print(json_line['events'][0]['message']['text'])
     # handle webhook body
     try:
         handler.handle(body, signature)
