@@ -1,7 +1,7 @@
 from flask import Flask, request, abort
 
 from linebot import (
-    LineBotApi, WebhookHandler
+    LineBotApi, WebhookHandler,WebhookParser
 )
 from linebot.exceptions import (
     InvalidSignatureError
@@ -14,7 +14,7 @@ app = Flask(__name__)
 
 line_bot_api = LineBotApi('YOUR_CHANNEL_ACCESS_TOKEN')
 handler = WebhookHandler('YOUR_CHANNEL_SECRET')
-
+parser = linebot.WebhookParser('YOUR_CHANNEL_SECRET')
 
 @app.route("/callback", methods=['POST'])
 def callback():
@@ -24,16 +24,16 @@ def callback():
 
     # get request body as text
     body = request.get_data(as_text=True)
-    app.logger.info("Request body: " + body)
-    print(signature)
+    events = parser.parse(body, signature)
+    print(events)
     json_line = request.get_json()
     tok=json_line['events'][0]['replyToken']
     textt=json_line['events'][0]['message']['text']
     print(json_line['events'][0]['replyToken'])
     print(json_line['events'][0]['message']['text'])
-    line_bot_api.reply_message(
-        tok,
-        TextSendMessage(text=textt))
+    #line_bot_api.reply_message(
+     #   tok,
+      #  TextSendMessage(text=textt))
     # handle webhook body
     try:
         handler.handle(body, signature)
