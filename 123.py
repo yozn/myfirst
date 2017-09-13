@@ -27,9 +27,13 @@ def callback():
     app.logger.info("Request body: " + body)
     print(signature)
     json_line = request.get_json()
-    print(json_line['events'][0])
+    tok=json_line['events'][0]['replyToken']
+	textt=json_line['events'][0]['message']['text']
     print(json_line['events'][0]['replyToken'])
     print(json_line['events'][0]['message']['text'])
+    line_bot_api.reply_message(
+        tok,
+        TextSendMessage(text=textt))
     # handle webhook body
     try:
         handler.handle(body, signature)
