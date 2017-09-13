@@ -27,8 +27,8 @@ def callback():
     app.logger.info("Request body: " + body)
     print(signature)
     json_line = request.get_json()
-    print(json_line['events']['replyToken'])
-    print(type(json_line))
+    print(json_line['events'][0])
+    print(type(json_line['events'][0]))
     # handle webhook body
     try:
         handler.handle(body, signature)
