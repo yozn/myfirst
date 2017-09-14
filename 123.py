@@ -28,17 +28,17 @@ def callback():
     print(body)
     # events = parser.parse(body, signature)
     # print(events)
-    json_line = request.get_json()
-    tok=json_line['events'][0]['replyToken']
-    textt=json_line['events'][0]['message']['text']
-    print(json_line['events'][0]['replyToken'])
-    print(json_line['events'][0]['message']['text'])
+    # json_line = request.get_json()
+    # tok=json_line['events'][0]['replyToken']
+    # textt=json_line['events'][0]['message']['text']
+    # print(json_line['events'][0]['replyToken'])
+    # print(json_line['events'][0]['message']['text'])
     #line_bot_api.reply_message(
      #   tok,
       #  TextSendMessage(text=textt))
     # handle webhook body
     try:
-        handler.handle(body, signature)
+        handler.handle(body=body, signature=signature)
         print('get handle')
     except InvalidSignatureError:
         print('not get handle')
