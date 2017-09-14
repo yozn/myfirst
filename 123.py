@@ -35,12 +35,15 @@ def callback():
     # get X-Line-Signature header value
     signature = request.headers['X-Line-Signature']
     # signature = request.headers
-    print("1"+signature)
+    print("1:"+signature)
+    print(type(signature))
 
     # get request body as text
     body = request.get_data(as_text=True)
     print(body)
-    print(my(bodyy=body))
+    b=my(bodyy=body)
+    print(b)
+    print(type(b))
     # events = parser.parse(body, signature)
     # print(events)
     json_line = request.get_json()
