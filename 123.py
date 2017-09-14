@@ -60,7 +60,8 @@ def callback():
     print(type(signaturee))
 
     try:
-        handler.handle(body=body, signature=signaturee)
+        # handler.handle(body=body, signature=signaturee)
+        events = parser.parse(body, signature)
         print('get handle')
     except InvalidSignatureError:
         print('not get handle')
