@@ -47,6 +47,7 @@ def callback():
         print('get handle')
     except InvalidSignatureError:
         print('not get handle')
+        handler.handle(body=body, signature=signature)
         abort(400)
 
     return 'OK'
