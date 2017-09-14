@@ -1,10 +1,11 @@
-#123
-from flask import Flask, request, abort
-from linebot import SignatureValidator
-from linebot import (
-    LineBotApi, WebhookHandler,WebhookParser
-)
+import os
+import sys
+from argparse import ArgumentParser
 
+from flask import Flask, request, abort
+from linebot import (
+    LineBotApi, WebhookHandler
+)
 from linebot.exceptions import (
     InvalidSignatureError
 )
@@ -13,58 +14,53 @@ from linebot.models import (
 )
 
 app = Flask(__name__)
-print('parser2')
-line_bot_api = LineBotApi('YOUR_CHANNEL_ACCESS_TOKEN')
-# handler = WebhookHandler('YOUR_CHANNEL_SECRET')
-parser = WebhookParser('YOUR_CHANNEL_SECRET')
-print('parser2')
-# parser = linebot.WebhookParser('YOUR_CHANNEL_SECRET')
+
+# get channel_secret and channel_access_token from your environment variable
+channel_secret = os.getenv('LINE_CHANNEL_SECRET', None)
+channel_access_token = os.getenv('LINE_CHANNEL_ACCESS_TOKEN', None)
+if channel_secret is None:
+    print('Specify LINE_CHANNEL_SECRET as environment variable.')
+    sys.exit(1)
+if channel_access_token is None:
+    print('Specify LINE_CHANNEL_ACCESS_TOKEN as environment variable.')
+    sys.exit(1)
+
+line_bot_api = LineBotApi(channel_access_token)
+handler = WebhookHandler(channel_secret)
+
 
 @app.route("/callback", methods=['POST'])
 def callback():
-
     # get X-Line-Signature header value
-
+    signature = request.headers['X-Line-Signature']
 
     # get request body as text
     body = request.get_data(as_text=True)
-    print(body)
-    # events = parser.parse(body, signature)
-    # print(events)
-    json_line = request.get_json()
-    tok=json_line['events'][0]['replyToken']
-    textt=json_line['events'][0]['message']['text']
-    # print(json_line['events'][0]['replyToken'])
-    # print(json_line['events'][0]['message']['text'])
-    # SignatureValidator.validate(self=handler,body=body,signature=signature)
-    #
-    # line_bot_api.reply_message(
-    #   tok,
-    #  TextSendMessage(text=textt))
-    signaturee = request.headers['X-Line-Signature']
-    # signature = request.headers
-    print("1:" + signaturee)
-    print(type(signaturee))
+    app.logger.info("Request body: " + body)
 
+    # handle webhook body
     try:
-        # handler.handle(body=body, signature=signaturee)
-        events = parser.parse(body, signature)
-        print('get handle')
+        handler.handle(body, signature)
     except InvalidSignatureError:
-        print('not get handle')
         abort(400)
 
     return 'OK'
 
 
 @handler.add(MessageEvent, message=TextMessage)
-def handle_message(event):
-    print('hello!2')
-    print(event.reply_token)
+def message_text(event):
     line_bot_api.reply_message(
         event.reply_token,
-        TextSendMessage(text=event.message.text))
+        TextSendMessage(text=event.message.text)
+    )
 
 
 if __name__ == "__main__":
-    app.run()
+    arg_parser = ArgumentParser(
+        usage='Usage: python ' + __file__ + ' [--port <port>] [--help]'
+    )
+    arg_parser.add_argument('-p', '--port', default=8000, help='port')
+    arg_parser.add_argument('-d', '--debug', default=False, help='debug')
+    options = arg_parser.parse_args()
+
+    app.run(debug=options.debug, port=options.port)
