@@ -15,7 +15,8 @@ from linebot.models import (
 app = Flask(__name__)
 
 line_bot_api = LineBotApi('YOUR_CHANNEL_ACCESS_TOKEN')
-handler = WebhookHandler('YOUR_CHANNEL_SECRET')
+# handler = WebhookHandler('YOUR_CHANNEL_SECRET')
+parser = WebhookParser('YOUR_CHANNEL_SECRET')
 # parser = linebot.WebhookParser('YOUR_CHANNEL_SECRET')
 def my(bodyy):
     import base64
