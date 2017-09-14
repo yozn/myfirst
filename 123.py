@@ -33,10 +33,7 @@ def my(bodyy):
 def callback():
 
     # get X-Line-Signature header value
-    signature = request.headers['X-Line-Signature']
-    # signature = request.headers
-    print("1:"+signature)
-    print(type(signature))
+
 
     # get request body as text
     body = request.get_data(as_text=True)
@@ -57,7 +54,10 @@ def callback():
     # line_bot_api.reply_message(
     #   tok,
     #  TextSendMessage(text=textt))
-
+    signature = request.headers['X-Line-Signature']
+    # signature = request.headers
+    print("1:" + signature)
+    print(type(signature))
 
     try:
         handler.handle(body=body, signature=aa)
