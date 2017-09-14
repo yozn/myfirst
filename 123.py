@@ -34,8 +34,8 @@ def callback():
     textt=json_line['events'][0]['message']['text']
     # print(json_line['events'][0]['replyToken'])
     # print(json_line['events'][0]['message']['text'])
-    SignatureValidator.validate(body=body,signature=signature)
-    
+    SignatureValidator.validate(self=handler,body=body,signature=signature)
+
     line_bot_api.reply_message(
       tok,
      TextSendMessage(text=textt))
