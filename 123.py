@@ -1,5 +1,6 @@
 import os
 import sys
+import toslack.py
 from argparse import ArgumentParser
 
 from flask import Flask, request, abort
@@ -37,7 +38,10 @@ def callback():
     # get request body as text
     body = request.get_data(as_text=True)
     app.logger.info("Request body: " + body)
-
+    json_line = request.get_json()
+    tok = json_line['events'][0]['replyToken']
+    textt = json_line['events'][0]['message']['text']
+    toslack.slack_send(textt)
     # handle webhook body
     try:
         handler.handle(body, signature)
