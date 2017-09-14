@@ -54,13 +54,13 @@ def callback():
     # line_bot_api.reply_message(
     #   tok,
     #  TextSendMessage(text=textt))
-    signature = request.headers['X-Line-Signature']
+    signaturee = request.headers['X-Line-Signature']
     # signature = request.headers
-    print("1:" + signature)
-    print(type(signature))
+    print("1:" + signaturee)
+    print(type(signaturee))
 
     try:
-        handler.handle(body=body, signature=aa)
+        handler.handle(body=body, signature=signaturee)
         print('get handle')
     except InvalidSignatureError:
         print('not get handle')
