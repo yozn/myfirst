@@ -17,18 +17,30 @@ app = Flask(__name__)
 line_bot_api = LineBotApi('YOUR_CHANNEL_ACCESS_TOKEN')
 handler = WebhookHandler('YOUR_CHANNEL_SECRET')
 # parser = linebot.WebhookParser('YOUR_CHANNEL_SECRET')
+def my(bodyy):
+    import base64
+    import hashlib
+    import hmac
 
+    channel_secret ='YOUR_CHANNEL_SECRET'
+    body =bodyy # Request body string
+    hash = hmac.new(channel_secret.encode('utf-8'),
+                    body.encode('utf-8'), hashlib.sha256).digest()
+    signature = base64.b64encode(hash)
+    return signature
+    # Compare X-Line-Signature request header and the signature
 @app.route("/callback", methods=['POST'])
 def callback():
 
     # get X-Line-Signature header value
-    # signature = request.headers['X-Line-Signature']
-    signature = request.headers
-    print(signature)
+    signature = request.headers['X-Line-Signature']
+    # signature = request.headers
+    print("1"+signature)
 
     # get request body as text
     body = request.get_data(as_text=True)
     print(body)
+    print(my(bodyy=body))
     # events = parser.parse(body, signature)
     # print(events)
     json_line = request.get_json()
