@@ -41,7 +41,8 @@ def callback():
     json_line = request.get_json()
     tok = json_line['events'][0]['replyToken']
     textt = json_line['events'][0]['message']['text']
-    toslack.slack_send(textt)
+    # toslack.slack_send(textt)
+    print(textt)
     # handle webhook body
     try:
         handler.handle(body, signature)
