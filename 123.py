@@ -42,7 +42,8 @@ def callback():
     body = request.get_data(as_text=True)
     print(body)
     b=my(bodyy=body)
-    print(b.decode("utf-8"))
+    aa=str(b,'utf-8')
+    print(aa)
     print(type(b))
     # events = parser.parse(body, signature)
     # print(events)
@@ -59,7 +60,7 @@ def callback():
 
 
     try:
-        handler.handle(body=body, signature=b.decode("utf-8"))
+        handler.handle(body=body, signature=aa)
         print('get handle')
     except InvalidSignatureError:
         print('not get handle')
